@@ -10,6 +10,7 @@ public class DepartmentService {
 
     @Autowired
     DepartmentRepository departmentRepository;
+    private DepartmentRepository departmentRepository1;
 
     public DepartmentService (DepartmentRepository departmentRepository) {
         this.departmentRepository = departmentRepository;
@@ -20,7 +21,7 @@ public class DepartmentService {
     }
 
     public Department show(Integer id) {
-        return departmentRepository.findOne(id);
+        return departmentRepository.findById(id).get();
     }
 
     public Department create(Department department) {
@@ -28,14 +29,14 @@ public class DepartmentService {
     }
 
     public Department update(Integer id, Department newDepartment) {
-        Department originalDepartment = departmentRepository.findOne(id);
+        Department originalDepartment = departmentRepository.findById(id).get();
         originalDepartment.setName(newDepartment.getName());
         originalDepartment.setManagerID(newDepartment.getManagerID());
         return departmentRepository.save(originalDepartment);
     }
 
     public Boolean delete(Integer id) {
-        departmentRepository.delete(id);
+        departmentRepository.deleteById(id);
         return true;
     }
 }
