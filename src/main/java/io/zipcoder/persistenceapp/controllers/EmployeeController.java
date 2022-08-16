@@ -40,6 +40,12 @@ public class EmployeeController {
         return new ResponseEntity<>(employeeService.getDirectReports(id), HttpStatus.OK);
     }
 
+    // Get all employees who report directly or indirectly to a particular manager
+    @GetMapping("/employee/{id}/allreports")
+    public ResponseEntity<List<Employee>> getAllReports(@PathVariable Integer id) {
+        return new ResponseEntity<>(employeeService.getAllReports(id), HttpStatus.OK);
+    }
+
     @GetMapping("/employee/{id}/hierarchy")
     public ResponseEntity<List<Employee>> getReportingHierarchy(@PathVariable Integer id) {
         return new ResponseEntity<>(employeeService.getReportingHierarchy(id), HttpStatus.OK);

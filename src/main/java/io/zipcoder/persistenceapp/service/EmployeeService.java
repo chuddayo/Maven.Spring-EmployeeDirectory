@@ -27,13 +27,20 @@ public class EmployeeService {
     }
 
     public List<Employee> getDirectReports(Integer id) {
-        Iterable<Employee> employeeIterable = index();
-        List<Employee> employeeList = new ArrayList<>();
-        employeeIterable.forEach(employeeList::add);
-        return employeeList.stream()
+        return StreamSupport.stream(index().spliterator(), false)
                 .filter(e -> e.getManagerID() != null)
                 .filter(e -> e.getManagerID().equals(id))
                 .collect(Collectors.toList());
+    }
+
+    public List<Employee> getAllReports(Integer id) {
+        List<Employee> reportsList = getDirectReports(id);
+        List<Employee> subReportsList = new ArrayList<>();
+        for (Employee e : reportsList) {
+            subReportsList.addAll(getAllReports(e.getId()));
+        }
+        reportsList.addAll(subReportsList);
+        return reportsList;
     }
 
     public List<Employee> getReportingHierarchy(Integer id) {
