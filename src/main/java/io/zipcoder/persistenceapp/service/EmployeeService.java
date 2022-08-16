@@ -1,6 +1,8 @@
 package io.zipcoder.persistenceapp.service;
 
+import io.zipcoder.persistenceapp.models.Department;
 import io.zipcoder.persistenceapp.models.Employee;
+import io.zipcoder.persistenceapp.repositories.DepartmentRepository;
 import io.zipcoder.persistenceapp.repositories.EmployeeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -12,26 +14,29 @@ import java.util.stream.StreamSupport;
 @Service
 public class EmployeeService {
     @Autowired
-    EmployeeRepository repository;
+    EmployeeRepository employeeRepository;
+
+    @Autowired
+    DepartmentRepository departmentRepository;
 
     public EmployeeService (EmployeeRepository employeeRepository) {
-        repository = employeeRepository;
+        this.employeeRepository = employeeRepository;
     }
 
     public Iterable<Employee> index() {
-        return repository.findAll();
+        return employeeRepository.findAll();
     }
 
     public Employee show(Integer id) {
-        return repository.findOne(id);
+        return employeeRepository.findOne(id);
     }
 
     public Employee create(Employee employee) {
-        return repository.save(employee);
+        return employeeRepository.save(employee);
     }
 
     public Employee update(Integer id, Employee newEmployeeInfo) {
-        Employee currentEmployee = repository.findOne(id);
+        Employee currentEmployee = employeeRepository.findOne(id);
         currentEmployee.setFirstName(newEmployeeInfo.getFirstName());
         currentEmployee.setLastName(newEmployeeInfo.getLastName());
         currentEmployee.setDepartmentID(newEmployeeInfo.getDepartmentID());
@@ -40,7 +45,11 @@ public class EmployeeService {
         currentEmployee.setManagerID(newEmployeeInfo.getManagerID());
         currentEmployee.setPhoneNumber(newEmployeeInfo.getPhoneNumber());
         currentEmployee.setTitle(newEmployeeInfo.getTitle());
-        return repository.save(currentEmployee);
+        return employeeRepository.save(currentEmployee);
+    }
+
+    public String getDepartmentName(Integer id) {
+        return departmentRepository.findOne(show(id).getDepartmentID()).getName();
     }
 
     public List<Employee> getDirectReports(Integer id) {
@@ -87,7 +96,7 @@ public class EmployeeService {
         Employee newEmployeeInfo = show(id);
         newEmployeeInfo.setManagerID(managerID);
         newEmployeeInfo.setDepartmentID(show(managerID).getDepartmentID());
-        return repository.save(newEmployeeInfo);
+        return employeeRepository.save(newEmployeeInfo);
     }
 
     public Boolean delete(Integer id) {
@@ -96,10 +105,10 @@ public class EmployeeService {
             List<Employee> employeeList = getDirectReports(id);
             for (Employee e : employeeList) {
                 e.setManagerID(managerID);
-                repository.save(e);
+                employeeRepository.save(e);
             }
         }
-        repository.delete(id);
+        employeeRepository.delete(id);
         return true;
     }
 

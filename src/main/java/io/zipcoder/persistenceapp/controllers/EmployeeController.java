@@ -45,6 +45,12 @@ public class EmployeeController {
         return new ResponseEntity<>(employeeService.show(id), HttpStatus.OK);
     }
 
+    // GET department name of employee with {id}
+    @GetMapping("/employee/{id}/departmentname")
+    public ResponseEntity<String> getDepartmentName(@PathVariable Integer id) {
+        return new ResponseEntity<>(employeeService.getDepartmentName(id), HttpStatus.OK);
+    }
+
     // GET all employees who report directly to a particular manager with {id}
     @GetMapping("/employee/{id}/directreports")
     public ResponseEntity<List<Employee>> getDirectReports(@PathVariable Integer id) {
