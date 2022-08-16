@@ -30,6 +30,11 @@ public class EmployeeController {
         return new ResponseEntity<>(employeeService.update(id, employee), HttpStatus.OK);
     }
 
+    @GetMapping("/employee")
+    public ResponseEntity<Iterable<Employee>> index() {
+        return new ResponseEntity<>(employeeService.index(), HttpStatus.OK);
+    }
+
     @GetMapping("/employee/{id}")
     public ResponseEntity<Employee> show(@PathVariable Integer id) {
         return new ResponseEntity<>(employeeService.show(id), HttpStatus.OK);
