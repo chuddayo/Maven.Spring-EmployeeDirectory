@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -30,7 +31,17 @@ public class EmployeeService {
         Iterable<Employee> employeeIterable = index();
         List<Employee> employeeList = new ArrayList<>();
         employeeIterable.forEach(employeeList::add);
-        return employeeList.stream().filter(e -> e.getManagerID().equals(id)).collect(Collectors.toList());
+        return employeeList.stream().filter(e -> e.getManagerID() != null).filter(e -> e.getManagerID().equals(id)).collect(Collectors.toList());
+    }
+
+    public List<Employee> getReportingHierarchy(Integer id) {
+        List<Employee> employeeList = new ArrayList<>();
+        employeeList.add(show(id));
+        // TODO breaks if the managerID is not an employeeID that exists
+        while (employeeList.get(employeeList.size()-1).getManagerID() != null) {
+            employeeList.add(show(employeeList.get(employeeList.size()-1).getManagerID()));
+        }
+        return employeeList;
     }
 
     public Employee create(Employee employee) {
