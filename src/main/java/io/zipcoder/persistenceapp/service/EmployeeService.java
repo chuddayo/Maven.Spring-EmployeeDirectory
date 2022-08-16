@@ -94,4 +94,11 @@ public class EmployeeService {
         repository.delete(id);
         return true;
     }
+
+    public Boolean deleteEmployeeList(List<Employee> employeeList) {
+        for (Employee e : employeeList) {
+            repository.delete(e.getId());
+        }
+        return true;
+    }
 }

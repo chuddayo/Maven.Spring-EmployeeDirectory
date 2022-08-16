@@ -74,4 +74,17 @@ public class EmployeeController {
     public ResponseEntity<List<Employee>> getDepartmentEmployees(@PathVariable Integer id) {
         return new ResponseEntity<>(employeeService.getDepartmentEmployees(id), HttpStatus.OK);
     }
+
+    // REMOVE a single employee
+    @DeleteMapping("/employee/{id}")
+    public ResponseEntity<Boolean> deleteEmployee(@PathVariable Integer id) {
+        return new ResponseEntity<>(employeeService.delete(id), HttpStatus.OK);
+    }
+
+    // REMOVE a list of employees
+    @DeleteMapping("/employee/list")
+    public ResponseEntity<Boolean> deleteEmployeeList(@RequestBody List<Employee> employeeList) {
+        return new ResponseEntity<>(employeeService.deleteEmployeeList(employeeList), HttpStatus.OK);
+    }
+
 }
