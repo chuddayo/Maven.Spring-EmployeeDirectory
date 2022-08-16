@@ -35,6 +35,12 @@ public class DepartmentService {
         return departmentRepository.save(originalDepartment);
     }
 
+    public Department updateDepartmentManager(Integer id, Integer managerID) {
+        Department newDepartmentInfo = show(id);
+        newDepartmentInfo.setManagerID(managerID);
+        return departmentRepository.save(newDepartmentInfo);
+    }
+
     public Boolean delete(Integer id) {
         departmentRepository.delete(id);
         return true;

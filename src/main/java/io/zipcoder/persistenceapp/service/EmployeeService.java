@@ -5,6 +5,10 @@ import io.zipcoder.persistenceapp.repositories.EmployeeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 public class EmployeeService {
     @Autowired
@@ -22,6 +26,13 @@ public class EmployeeService {
         return repository.findOne(id);
     }
 
+    public List<Employee> getDirectReports(Integer id) {
+        Iterable<Employee> employeeIterable = index();
+        List<Employee> employeeList = new ArrayList<>();
+        employeeIterable.forEach(employeeList::add);
+        return employeeList.stream().filter(e -> e.getManagerID().equals(id)).collect(Collectors.toList());
+    }
+
     public Employee create(Employee employee) {
         return repository.save(employee);
     }
@@ -37,6 +48,13 @@ public class EmployeeService {
         currentEmployee.setPhoneNumber(newEmployeeInfo.getPhoneNumber());
         currentEmployee.setTitle(newEmployeeInfo.getTitle());
         return repository.save(currentEmployee);
+    }
+
+    public Employee updateManager(Integer id, Integer managerID) {
+        Employee newEmployeeInfo = show(id);
+        newEmployeeInfo.setManagerID(managerID);
+        newEmployeeInfo.setDepartmentID(show(managerID).getDepartmentID());
+        return repository.save(newEmployeeInfo);
     }
 
     public Boolean delete(Integer id) {
