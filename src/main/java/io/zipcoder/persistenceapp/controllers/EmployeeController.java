@@ -45,4 +45,9 @@ public class EmployeeController {
     public ResponseEntity<List<Employee>> getReportingHierarchy(@PathVariable Integer id) {
         return new ResponseEntity<>(employeeService.getReportingHierarchy(id), HttpStatus.OK);
     }
+
+    @GetMapping("/employee/bosses")
+    public ResponseEntity<List<Employee>> getBosses() {
+        return new ResponseEntity<>(employeeService.getBosses(), HttpStatus.OK);
+    }
 }

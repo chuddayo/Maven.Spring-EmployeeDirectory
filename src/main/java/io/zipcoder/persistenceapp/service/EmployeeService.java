@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 @Service
 public class EmployeeService {
@@ -42,6 +43,10 @@ public class EmployeeService {
             employeeList.add(show(employeeList.get(employeeList.size()-1).getManagerID()));
         }
         return employeeList;
+    }
+
+    public List<Employee> getBosses() {
+        return StreamSupport.stream(index().spliterator(), false).filter(e -> e.getManagerID() == null).collect(Collectors.toList());
     }
 
     public Employee create(Employee employee) {
