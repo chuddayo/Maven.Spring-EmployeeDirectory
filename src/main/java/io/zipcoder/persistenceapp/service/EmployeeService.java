@@ -26,6 +26,23 @@ public class EmployeeService {
         return repository.findOne(id);
     }
 
+    public Employee create(Employee employee) {
+        return repository.save(employee);
+    }
+
+    public Employee update(Integer id, Employee newEmployeeInfo) {
+        Employee currentEmployee = repository.findOne(id);
+        currentEmployee.setFirstName(newEmployeeInfo.getFirstName());
+        currentEmployee.setLastName(newEmployeeInfo.getLastName());
+        currentEmployee.setDepartmentID(newEmployeeInfo.getDepartmentID());
+        currentEmployee.setEmail(newEmployeeInfo.getEmail());
+        currentEmployee.setHireDate(newEmployeeInfo.getHireDate());
+        currentEmployee.setManagerID(newEmployeeInfo.getManagerID());
+        currentEmployee.setPhoneNumber(newEmployeeInfo.getPhoneNumber());
+        currentEmployee.setTitle(newEmployeeInfo.getTitle());
+        return repository.save(currentEmployee);
+    }
+
     public List<Employee> getDirectReports(Integer id) {
         return StreamSupport.stream(index().spliterator(), false)
                 .filter(e -> e.getManagerID() != null)
@@ -66,23 +83,6 @@ public class EmployeeService {
                 .collect(Collectors.toList());
     }
 
-    public Employee create(Employee employee) {
-        return repository.save(employee);
-    }
-
-    public Employee update(Integer id, Employee newEmployeeInfo) {
-        Employee currentEmployee = repository.findOne(id);
-        currentEmployee.setFirstName(newEmployeeInfo.getFirstName());
-        currentEmployee.setLastName(newEmployeeInfo.getLastName());
-        currentEmployee.setDepartmentID(newEmployeeInfo.getDepartmentID());
-        currentEmployee.setEmail(newEmployeeInfo.getEmail());
-        currentEmployee.setHireDate(newEmployeeInfo.getHireDate());
-        currentEmployee.setManagerID(newEmployeeInfo.getManagerID());
-        currentEmployee.setPhoneNumber(newEmployeeInfo.getPhoneNumber());
-        currentEmployee.setTitle(newEmployeeInfo.getTitle());
-        return repository.save(currentEmployee);
-    }
-
     public Employee updateManager(Integer id, Integer managerID) {
         Employee newEmployeeInfo = show(id);
         newEmployeeInfo.setManagerID(managerID);
@@ -91,13 +91,31 @@ public class EmployeeService {
     }
 
     public Boolean delete(Integer id) {
+        if (show(id).getManagerID() != null) {
+            Integer managerID = show(id).getManagerID();
+            List<Employee> employeeList = getDirectReports(id);
+            for (Employee e : employeeList) {
+                e.setManagerID(managerID);
+                repository.save(e);
+            }
+        }
         repository.delete(id);
         return true;
     }
 
     public Boolean deleteEmployeeList(List<Employee> employeeList) {
         for (Employee e : employeeList) {
-            repository.delete(e.getId());
+            delete(e.getId());
+        }
+        return true;
+    }
+
+    public Boolean deleteEmployeesFromDept(Integer departmentID) {
+        Iterable<Employee> employeeIterable = index();
+        for (Employee e : employeeIterable) {
+            if (e.getDepartmentID().equals(departmentID)) {
+                delete(e.getId());
+            }
         }
         return true;
     }

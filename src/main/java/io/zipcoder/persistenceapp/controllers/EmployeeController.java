@@ -87,4 +87,9 @@ public class EmployeeController {
         return new ResponseEntity<>(employeeService.deleteEmployeeList(employeeList), HttpStatus.OK);
     }
 
+    // REMOVE all employees from a particular department
+    @DeleteMapping("/employee/department/{id}")
+    public ResponseEntity<Boolean> deleteEmployeesFromDept(@PathVariable Integer id) {
+        return new ResponseEntity<>(employeeService.deleteEmployeesFromDept(id), HttpStatus.OK);
+    }
 }
