@@ -98,4 +98,11 @@ public class EmployeeController {
     public ResponseEntity<Boolean> deleteAllReports(@PathVariable Integer id) {
         return new ResponseEntity<>(employeeService.deleteAllReports(id), HttpStatus.OK);
     }
+
+    // REMOVE all direct reports to a manager. Any employees previously managed by the deleted employees should now be
+    // managed by the next manager up the hierarchy.
+    @DeleteMapping("employee/{id}/directreports")
+    public ResponseEntity<Boolean> deleteDirectReports(@PathVariable Integer id) {
+        return new ResponseEntity<>(employeeService.deleteDirectReports(id), HttpStatus.OK);
+    }
 }

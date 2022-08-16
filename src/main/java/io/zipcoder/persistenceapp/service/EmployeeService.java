@@ -120,6 +120,11 @@ public class EmployeeService {
         return true;
     }
 
+    public Boolean deleteDirectReports(Integer id) {
+        deleteEmployeeList(getDirectReports(id));
+        return true;
+    }
+
     public Boolean deleteAllReports(Integer id) {
         deleteEmployeeList(getAllReports(id));
         return true;
