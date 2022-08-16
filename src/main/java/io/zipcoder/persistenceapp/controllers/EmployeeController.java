@@ -5,7 +5,6 @@ import io.zipcoder.persistenceapp.service.EmployeeService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 
 @RestController
@@ -49,5 +48,10 @@ public class EmployeeController {
     @GetMapping("/employee/bosses")
     public ResponseEntity<List<Employee>> getBosses() {
         return new ResponseEntity<>(employeeService.getBosses(), HttpStatus.OK);
+    }
+
+    @GetMapping("/employee/department/{id}")
+    public ResponseEntity<List<Employee>> getDepartmentEmployees(@PathVariable Integer id) {
+        return new ResponseEntity<>(employeeService.getDepartmentEmployees(id), HttpStatus.OK);
     }
 }

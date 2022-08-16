@@ -4,9 +4,7 @@ import io.zipcoder.persistenceapp.models.Employee;
 import io.zipcoder.persistenceapp.repositories.EmployeeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
@@ -32,7 +30,10 @@ public class EmployeeService {
         Iterable<Employee> employeeIterable = index();
         List<Employee> employeeList = new ArrayList<>();
         employeeIterable.forEach(employeeList::add);
-        return employeeList.stream().filter(e -> e.getManagerID() != null).filter(e -> e.getManagerID().equals(id)).collect(Collectors.toList());
+        return employeeList.stream()
+                .filter(e -> e.getManagerID() != null)
+                .filter(e -> e.getManagerID().equals(id))
+                .collect(Collectors.toList());
     }
 
     public List<Employee> getReportingHierarchy(Integer id) {
@@ -46,7 +47,16 @@ public class EmployeeService {
     }
 
     public List<Employee> getBosses() {
-        return StreamSupport.stream(index().spliterator(), false).filter(e -> e.getManagerID() == null).collect(Collectors.toList());
+        return StreamSupport.stream(index().spliterator(), false)
+                .filter(e -> e.getManagerID() == null)
+                .collect(Collectors.toList());
+    }
+
+    public List<Employee> getDepartmentEmployees(Integer departmentID) {
+        return StreamSupport.stream(index().spliterator(), false)
+                .filter(e -> e.getDepartmentID() != null)
+                .filter(e -> e.getDepartmentID().equals(departmentID))
+                .collect(Collectors.toList());
     }
 
     public Employee create(Employee employee) {
