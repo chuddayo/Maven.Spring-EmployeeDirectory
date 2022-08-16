@@ -21,7 +21,7 @@ public class DepartmentService {
     }
 
     public Department show(Integer id) {
-        return departmentRepository.findById(id).get();
+        return departmentRepository.findOne(id);
     }
 
     public Department create(Department department) {
@@ -29,14 +29,14 @@ public class DepartmentService {
     }
 
     public Department update(Integer id, Department newDepartment) {
-        Department originalDepartment = departmentRepository.findById(id).get();
+        Department originalDepartment = departmentRepository.findOne(id);
         originalDepartment.setName(newDepartment.getName());
         originalDepartment.setManagerID(newDepartment.getManagerID());
         return departmentRepository.save(originalDepartment);
     }
 
     public Boolean delete(Integer id) {
-        departmentRepository.deleteById(id);
+        departmentRepository.delete(id);
         return true;
     }
 }

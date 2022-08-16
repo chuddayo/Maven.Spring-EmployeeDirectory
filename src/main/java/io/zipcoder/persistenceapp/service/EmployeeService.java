@@ -19,7 +19,7 @@ public class EmployeeService {
     }
 
     public Employee show(Integer id) {
-        return repository.findById(id).get();
+        return repository.findOne(id);
     }
 
     public Employee create(Employee employee) {
@@ -27,7 +27,7 @@ public class EmployeeService {
     }
 
     public Employee update(Integer id, Employee newEmployeeInfo) {
-        Employee currentEmployee = repository.findById(id).get();
+        Employee currentEmployee = repository.findOne(id);
         currentEmployee.setFirstName(newEmployeeInfo.getFirstName());
         currentEmployee.setLastName(newEmployeeInfo.getLastName());
         currentEmployee.setDepartmentID(newEmployeeInfo.getDepartmentID());
@@ -40,7 +40,7 @@ public class EmployeeService {
     }
 
     public Boolean delete(Integer id) {
-        repository.deleteById(id);
+        repository.delete(id);
         return true;
     }
 }
