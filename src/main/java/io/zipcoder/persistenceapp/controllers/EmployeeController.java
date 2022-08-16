@@ -92,4 +92,10 @@ public class EmployeeController {
     public ResponseEntity<Boolean> deleteEmployeesFromDept(@PathVariable Integer id) {
         return new ResponseEntity<>(employeeService.deleteEmployeesFromDept(id), HttpStatus.OK);
     }
+
+    // REMOVE all employees under a particular manager (Including indirect reports)
+    @DeleteMapping("/employee/{id}/allreports")
+    public ResponseEntity<Boolean> deleteAllReports(@PathVariable Integer id) {
+        return new ResponseEntity<>(employeeService.deleteAllReports(id), HttpStatus.OK);
+    }
 }

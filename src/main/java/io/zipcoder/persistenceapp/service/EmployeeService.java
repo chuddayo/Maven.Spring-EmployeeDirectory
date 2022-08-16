@@ -119,4 +119,9 @@ public class EmployeeService {
         }
         return true;
     }
+
+    public Boolean deleteAllReports(Integer id) {
+        deleteEmployeeList(getAllReports(id));
+        return true;
+    }
 }
