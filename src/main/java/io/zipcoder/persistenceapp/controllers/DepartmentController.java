@@ -29,4 +29,5 @@ public class DepartmentController {
         return new ResponseEntity<>(departmentService.update(id, department), HttpStatus.OK);
     }
 
+
 }

@@ -99,6 +99,38 @@ public class EmployeeService {
         return employeeRepository.save(newEmployeeInfo);
     }
 
+    public List<Employee> mergeDepartments(Integer departmentIDA, Integer departmentIDB) {
+        List<Employee> employeeListUpdates = new ArrayList<>();
+        Employee deptAManager = show(departmentRepository.findOne(departmentIDA).getManagerID());
+        Employee deptBManager = show(departmentRepository.findOne(departmentIDB).getManagerID());
+
+        // Manager of A reports to B and works in B
+        deptAManager.setManagerID(deptBManager.getId());
+        deptAManager.setDepartmentID(departmentIDB);
+        employeeRepository.save(deptAManager);
+        employeeRepository.save(deptBManager);
+        employeeListUpdates.add(deptAManager);
+        employeeListUpdates.add(deptBManager);
+
+        // All direct reports of A report to B
+        List<Employee> directAReports = getDirectReports(deptAManager.getId());
+        for (Employee e : directAReports) {
+            e.setManagerID(deptBManager.getId());
+            employeeRepository.save(e);
+        }
+        employeeListUpdates.addAll(directAReports);
+
+        // All employees who work in A work in B
+        List<Employee> deptAemployeeList = getDepartmentEmployees(departmentIDA);
+        for (Employee e : deptAemployeeList) {
+            e.setDepartmentID(departmentIDB);
+            employeeRepository.save(e);
+        }
+        employeeListUpdates.addAll(deptAemployeeList);
+
+        return employeeListUpdates;
+    }
+
     public Boolean delete(Integer id) {
         if (show(id).getManagerID() != null) {
             Integer managerID = show(id).getManagerID();

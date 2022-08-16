@@ -33,6 +33,15 @@ public class EmployeeController {
         return new ResponseEntity<>(employeeService.update(id, employee), HttpStatus.OK);
     }
 
+    // MERGE department A into B
+    // Manager of A reports to B
+    // All direct reports A report to B
+    // All department employees get deptID updated
+    @PutMapping("/employee/department/{idA}/to/{idB}")
+    public ResponseEntity<List<Employee>> mergeDepartments(@PathVariable Integer idA, @PathVariable Integer idB) {
+        return new ResponseEntity<>(employeeService.mergeDepartments(idA, idB), HttpStatus.OK);
+    }
+
     // GET all employees as Iterable
     @GetMapping("/employee")
     public ResponseEntity<Iterable<Employee>> index() {
